@@ -27,6 +27,7 @@ defmodule Generator.Cell do
   end
 
   def to_tuple(cell), do: {cell.x, cell.y, get_bitstring(cell)}
+  def to_simple(cell), do: %{cell.x, cell.y, get_bitstring(cell)}
 
   defp add_north(n, %Cell{north: true}), do: n + 1
   defp add_north(n, _), do: n

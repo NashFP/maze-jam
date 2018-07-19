@@ -1,0 +1,10 @@
+<div class="jumbotron">
+  <h2>Maze Jam!</h2>
+  <div class="row">
+    <input type="text" placeholder="columns" class="cols">
+    <input type="text" placeholder="rows" class="rows">
+    <button class="btn btn-primary js-make-maze">Generate Maze!</button>
+  </div>
+  <table class="maze">
+  </table>
+</div>
