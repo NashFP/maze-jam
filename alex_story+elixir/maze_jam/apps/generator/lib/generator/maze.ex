@@ -34,9 +34,10 @@ defmodule Generator.Maze do
   def to_json(maze) do
     0..max_height(maze)
     |> Enum.map(fn v ->
-      0..max_width(fn h ->
+      0..max_width(maze)
+      |> Enum.map(fn h ->
         Enum.find(maze, & &1.y == v and &1.x == h)
-        |> Cell.to_bitstring
+        |> Cell.get_bitstring
       end)
     end)
   end
