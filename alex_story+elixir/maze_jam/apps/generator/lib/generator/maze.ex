@@ -24,11 +24,21 @@ defmodule Generator.Maze do
     |> Enum.map(&set_north(&1, maze))
     |> Enum.map(&set_south(&1, maze))
   end
-
+  
   def new(x, y) do
     for h <- 0..x-1, v <- 0..y-1 do
       %Cell{x: h, y: v}
     end
+  end
+
+  def to_json(maze) do
+    0..max_height(maze)
+    |> Enum.map(fn v ->
+      0..max_width(fn h ->
+        Enum.find(maze, & &1.y == v and &1.x == h)
+        |> Cell.to_bitstring
+      end)
+    end)
   end
 
 #### Private functions
