@@ -120,5 +120,5 @@ defmodule Generator.Maze do
   def get_south(cell, maze), do: Enum.find(maze, fn c -> c.x == cell.x && c.y == cell.y + 1 end)
 
   defp rand_bool, do: [true, false] |> Enum.random
-  defp rand_bitstring, do: 0..15 |> Enum.random
+  defp rand_bitstring, do: 0..14 |> Enum.random
 end

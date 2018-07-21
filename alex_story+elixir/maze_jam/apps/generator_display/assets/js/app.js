@@ -42,7 +42,6 @@ function build_table(maze) {
         let $tr = document.createElement('tr')
         $table.appendChild($tr)
         R.forEach(y => {
-            debugger
             let $td = document.createElement('td')
             $tr.appendChild($td)
             $td.innerText = y
