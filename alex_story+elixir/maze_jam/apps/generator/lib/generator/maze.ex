@@ -24,7 +24,13 @@ defmodule Generator.Maze do
     |> Enum.map(&set_north(&1, maze))
     |> Enum.map(&set_south(&1, maze))
   end
-  
+
+  def make(x, y, true) do
+    maze =
+      new(x, y)
+    |> Enum.map(&Cell.new(rand_bitstring(), &1))
+  end
+
   def new(x, y) do
     for h <- 0..x-1, v <- 0..y-1 do
       %Cell{x: h, y: v}
@@ -114,4 +120,5 @@ defmodule Generator.Maze do
   def get_south(cell, maze), do: Enum.find(maze, fn c -> c.x == cell.x && c.y == cell.y + 1 end)
 
   defp rand_bool, do: [true, false] |> Enum.random
+  defp rand_bitstring, do: 0..15 |> Enum.random
 end

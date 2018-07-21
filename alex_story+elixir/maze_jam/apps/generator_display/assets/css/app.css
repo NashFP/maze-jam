@@ -7,3 +7,6 @@
     display: block;
 }
 
+.maze {
+    border: 1px solid black;
+}

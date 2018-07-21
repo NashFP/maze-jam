@@ -38,26 +38,49 @@ function build_table(maze) {
     let t = u.u('.maze')
     t.empty()
     let $table = document.querySelector('.maze')
-    let rows = R.reduce(R.maxBy(x => x.y),R.head(maze),  R.tail(maze)).y
-    let columns = R.reduce(R.maxBy(x => x.x),R.head(maze), R.tail(maze)).x
-
-    for (let i = 0; i <= rows; i++) {
+    R.forEach(x => {
         let $tr = document.createElement('tr')
-
-        for (let j = 0; j <= columns; j++) {
-            let $td = document.createElement('td')
-            var cell = R.find(R.and(R.propEq('x', j),R.propEq('y', i)))(maze)
-            let $div = document.createElement('div')
-            if(cell.north) $div.style.borderTop = "#000 1px solid"
-            if(cell.east) $div.style.borderRight = "#000 1px solid"
-            if(cell.south) $div.style.borderBottom = "#000 1px solid"
-            if(cell.west) $div.style.borderLeft = "#000 1px solid"
-            $div.classList.add('cell')
-            $td.appendChild($div)
-            $tr.appendChild($td)
-        }
         $table.appendChild($tr)
-    }
+        R.forEach(y => {
+            debugger
+            let $td = document.createElement('td')
+            $tr.appendChild($td)
+            $td.innerText = y
+            let [west, wn] = isWest(y)
+            if (west)
+                $td.style.borderLeft = "solid 1px black"
+            let [east, en] = isEast(wn)
+            if (east)
+                $td.style.borderRight = "solid 1px black"
+            let [south, sn] = isSouth(en)
+            if (south)
+                $td.style.borderBottom = "solid 1px black"
+            if (isNorth(sn))
+                $td.style.borderTop = "solid 1px black"
+        })(x)
+    })(maze)
 }
 
+let isWest = R.ifElse(
+    R.lte(8),
+    R.identity(x => [true, x - 8]),
+    R.identity(x => [false, x])
+)
 
+let isEast = R.ifElse(
+    R.lte(4),
+    R.identity(x => [true, x - 4]),
+    R.identity(x => [false, x])
+)
+
+let isSouth = R.ifElse(
+    R.lte(2),
+    R.identity(x => [true, x - 2]),
+    R.identity(x => [false, x])
+)
+
+let isNorth = R.ifElse(
+    R.equals(1),
+    R.T,
+    R.F
+)

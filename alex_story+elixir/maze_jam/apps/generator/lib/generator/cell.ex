@@ -26,6 +26,16 @@ defmodule Generator.Cell do
     |> add_west(cell)
   end
 
+  def new(bitstring, cell \\ %Cell{}) do
+    with {cell, n} <- set_west(cell, bitstring),
+         {cell, n} <- set_east(cell, n),
+         {cell, n} <- set_south(cell, n),
+         {cell,n} <- set_north(cell, n)
+    do
+      cell
+    end
+  end
+
   def to_tuple(cell), do: {cell.x, cell.y, get_bitstring(cell)}
   def to_simple(cell), do: %{x: cell.x, y: cell.y, value: get_bitstring(cell)}
 
@@ -40,4 +50,17 @@ defmodule Generator.Cell do
 
   defp add_west(n, %Cell{west: true}), do: n + 8
   defp add_west(n, _), do: n
+
+  defp set_west(cell, n) when n >= 8, do: {Map.put(cell, :west, true), n - 8}
+  defp set_west(cell, n), do: {Map.put(cell, :west, false), n}
+
+  defp set_east(cell, n) when n >= 4, do: {Map.put(cell, :east, true), n - 4}
+  defp set_east(cell, n), do: {Map.put(cell, :east, false), n}
+
+  defp set_south(cell, n) when n >= 2, do: {Map.put(cell, :south, true), n - 2}
+  defp set_south(cell, n), do: {Map.put(cell, :south, false), n}
+
+  defp set_north(cell, n) when n >= 1, do: {Map.put(cell, :north, true), n - 1}
+  defp set_north(cell, n), do: {Map.put(cell, :north, false), n}
 end
+
