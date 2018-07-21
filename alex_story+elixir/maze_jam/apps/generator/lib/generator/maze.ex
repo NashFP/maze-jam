@@ -25,18 +25,17 @@ defmodule Generator.Maze do
     |> Enum.map(&set_south(&1, maze))
   end
 
+  @doc """
+  Makes a new maze, using randomized bitstrings
+  """
   def make(x, y, true) do
-    maze =
-      new(x, y)
+    new(x, y)
     |> Enum.map(&Cell.new(rand_bitstring(), &1))
   end
 
-  def new(x, y) do
-    for h <- 0..x-1, v <- 0..y-1 do
-      %Cell{x: h, y: v}
-    end
-  end
-
+  @doc """
+  Converts a maze into a doubly nested list of bitstrings.
+  """
   def to_json(maze) do
     0..max_height(maze)
     |> Enum.map(fn v ->
@@ -74,7 +73,7 @@ defmodule Generator.Maze do
     |> Map.get(:y)
   end
 
-  def set_east(cell, maze) do
+  defp set_east(cell, maze) do
     east = get_east(cell, maze)
     cond do
       cell.east != nil  -> cell
@@ -84,7 +83,7 @@ defmodule Generator.Maze do
     end
   end
 
-  def set_west(cell, maze) do
+  defp set_west(cell, maze) do
     west = get_west(cell, maze)
     cond do
       cell.west != nil  -> cell
@@ -94,7 +93,7 @@ defmodule Generator.Maze do
     end
   end
 
-  def set_north(cell, maze) do
+  defp set_north(cell, maze) do
     north = get_north(cell, maze)
     cond do
       cell.north != nil   -> cell
@@ -104,13 +103,19 @@ defmodule Generator.Maze do
     end
   end
 
-  def set_south(cell, maze) do
+  defp set_south(cell, maze) do
     south = get_south(cell, maze)
     cond do
       cell.south != nil   -> cell
       south == nil        -> Map.put(cell, :south, rand_bool())
       south.south == nil  -> Map.put(cell, :south, rand_bool())
       true                -> Map.put(cell, :south, south.north)
+    end
+  end
+ 
+  defp new(x, y) do
+    for h <- 0..x-1, v <- 0..y-1 do
+                                %Cell{x: h, y: v}
     end
   end
 
@@ -120,5 +125,5 @@ defmodule Generator.Maze do
   def get_south(cell, maze), do: Enum.find(maze, fn c -> c.x == cell.x && c.y == cell.y + 1 end)
 
   defp rand_bool, do: [true, false] |> Enum.random
-  defp rand_bitstring, do: 0..14 |> Enum.random
+  defp rand_bitstring, do: 0..15 |> Enum.random
 end
