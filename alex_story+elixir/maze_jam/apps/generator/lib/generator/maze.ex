@@ -47,6 +47,20 @@ defmodule Generator.Maze do
     end)
   end
 
+  @doc """
+  Returns the example maze
+  """
+  def example do
+    maze = [
+      [ 2, 14, 10, 14,  8 ],
+      [ 5,  9, 11, 13, 11 ],
+      [ 3, 15,  9, 15,  9 ],
+      [ 7, 15, 13, 15, 11 ],
+      [ 1, 13,  9,  9,  9 ]
+    ]
+    maze
+  end
+
 #### Private functions
 
   defp init_borders(maze) do
@@ -125,5 +139,5 @@ defmodule Generator.Maze do
   def get_south(cell, maze), do: Enum.find(maze, fn c -> c.x == cell.x && c.y == cell.y + 1 end)
 
   defp rand_bool, do: [true, false] |> Enum.random
-  defp rand_bitstring, do: 0..15 |> Enum.random
+  defp rand_bitstring, do: 1..15 |> Enum.random
 end

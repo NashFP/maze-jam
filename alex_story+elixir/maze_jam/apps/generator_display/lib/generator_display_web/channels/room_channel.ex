@@ -17,6 +17,12 @@ defmodule GeneratorDisplayWeb.RoomChannel do
     {:noreply, socket}
   end
 
+  def handle_in("get_example", _msg, socket) do
+    maze = Maze.example
+    broadcast! socket, "new_maze", %{maze: maze}
+    {:noreply, socket}
+  end
+
   def handle_in("get_maze", _message, socket) do
     maze =
       Generator.Maze.make(10,10)

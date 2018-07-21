@@ -21,9 +21,11 @@ import "phoenix_html"
 
 import {channel, socket} from "./socket"
 
-let $button = u.u('.btn')
+let $button = u.u('.js-make-maze')
+let $example = u.u('.js-make-example')
 
 $button.on('click', getMaze)
+$example.on('click', getExample)
 
 channel.on('new_maze', resp => build_table(resp.maze))
 
@@ -31,6 +33,10 @@ function getMaze() {
     var cols = u.u('.cols').first().value
     var rows = u.u('.rows').first().value
     channel.push('get_maze', {cols, rows})
+}
+
+function getExample() {
+    channel.push('get_example')
 }
 
 function build_table(maze) {
@@ -45,41 +51,21 @@ function build_table(maze) {
             let $td = document.createElement('td')
             $tr.appendChild($td)
             $td.innerText = y
-            let [west, wn] = isWest(y)
-            if (west)
+            if (!isWest(y))
                 $td.style.borderLeft = "solid 1px black"
-            let [east, en] = isEast(wn)
-            if (east)
+            if (!isEast(y))
                 $td.style.borderRight = "solid 1px black"
-            let [south, sn] = isSouth(en)
-            if (south)
+            if (!isSouth(y))
                 $td.style.borderBottom = "solid 1px black"
-            if (isNorth(sn))
+            if (!isNorth(y))
                 $td.style.borderTop = "solid 1px black"
         })(x)
     })(maze)
 }
 
-let isWest = R.ifElse(
-    R.lte(8),
-    R.identity(x => [true, x - 8]),
-    R.identity(x => [false, x])
-)
+let isWest = x => toBinary(x)[0] == "1"
+let isEast = x => toBinary(x)[1] == "1"
+let isSouth = x => toBinary(x)[2] == "1"
+let isNorth = x => toBinary(x)[3] == "1"
 
-let isEast = R.ifElse(
-    R.lte(4),
-    R.identity(x => [true, x - 4]),
-    R.identity(x => [false, x])
-)
-
-let isSouth = R.ifElse(
-    R.lte(2),
-    R.identity(x => [true, x - 2]),
-    R.identity(x => [false, x])
-)
-
-let isNorth = R.ifElse(
-    R.equals(1),
-    R.T,
-    R.F
-)
+let toBinary = x => (x).toString(2).padStart(4,"0")
